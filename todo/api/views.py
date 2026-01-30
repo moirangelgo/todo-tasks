@@ -5,7 +5,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Category, Task
 from .serializers import UserRegistrationSerializer, CategorySerializer, TaskSerializer
 
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):

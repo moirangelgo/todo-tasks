@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./todo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./todo/db.sqlite3:/app/db.sqlite3
+
+  frontend:
+    build: ./front
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
