@@ -8,6 +8,7 @@ import type { Category, Task } from '../types';
 import { logout } from '../services/auth';
 import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
+import logo from '../assets/logo.png';
 
 const { Header, Content, Sider } = Layout;
 const { Title } = Typography;
@@ -29,9 +30,9 @@ const Dashboard: React.FC = () => {
       console.error(error);
       navigate('/login');
     }
-//  finally {
-//       setLoading(false);
-//     }
+    //  finally {
+    //       setLoading(false);
+    //     }
   };
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const Dashboard: React.FC = () => {
   const handleToggleTask = async (task: Task) => {
     await updateTask(task.id, { is_completed: !task.is_completed });
     // Optimistic update or refetch
-    fetchData(); 
+    fetchData();
   };
 
   const handleDeleteTask = async (id: number) => {
@@ -69,10 +70,10 @@ const Dashboard: React.FC = () => {
       await createCategory(value);
       message.success('Categoría agregada');
       fetchData();
-    } catch(e) { message.error('Falló al agregar categoría'); }
+    } catch (e) { message.error('Falló al agregar categoría'); }
   };
-  
-    const handleDeleteCategory = async (e: React.MouseEvent, id: number) => {
+
+  const handleDeleteCategory = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     Modal.confirm({
       title: '¿Eliminar Categoría?',
@@ -85,8 +86,8 @@ const Dashboard: React.FC = () => {
     });
   };
 
-  const filteredTasks = selectedCategory === 'all' 
-    ? tasks 
+  const filteredTasks = selectedCategory === 'all'
+    ? tasks
     : tasks.filter(t => t.category === Number(selectedCategory));
 
   const pendingTasks = filteredTasks.filter(t => !t.is_completed);
@@ -97,8 +98,8 @@ const Dashboard: React.FC = () => {
       key: '1',
       label: 'Pendientes',
       children: (
-        <TaskList 
-          tasks={pendingTasks} 
+        <TaskList
+          tasks={pendingTasks}
           categories={categories}
           onToggle={handleToggleTask}
           onDelete={handleDeleteTask}
@@ -109,8 +110,8 @@ const Dashboard: React.FC = () => {
       key: '2',
       label: 'Terminadas',
       children: (
-        <TaskList 
-          tasks={completedTasks} 
+        <TaskList
+          tasks={completedTasks}
           categories={categories}
           onToggle={handleToggleTask}
           onDelete={handleDeleteTask}
@@ -123,55 +124,58 @@ const Dashboard: React.FC = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider theme="light" width={250} style={{ borderRight: '1px solid #f0f0f0' }}>
         <div style={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #f0f0f0' }}>
-            <Title level={4} style={{ margin: 0, color: '#1890ff' }}>Tasker</Title>
+          <Title level={4} style={{ margin: 0, color: '#1890ff' }}>
+            <img src={logo} width={100} />
+
+          </Title>
         </div>
-        <Menu 
-            mode="inline" 
-            selectedKeys={[selectedCategory]}
-            onClick={(e) => setSelectedCategory(e.key)}
-            style={{ borderRight: 0 }}
-            items={[
-                { key: 'all', icon: <AppstoreOutlined />, label: 'Todas las Tareas' },
-                ...categories.map(c => ({
-                    key: String(c.id),
-                    label: (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span>{c.title}</span>
-                            <DeleteOutlined 
-                                style={{ fontSize: 12, color: '#999' }} 
-                                onClick={(e) => handleDeleteCategory(e, c.id)} 
-                            />
-                        </div>
-                    )
-                }))
-            ]}
+        <Menu
+          mode="inline"
+          selectedKeys={[selectedCategory]}
+          onClick={(e) => setSelectedCategory(e.key)}
+          style={{ borderRight: 0 }}
+          items={[
+            { key: 'all', icon: <AppstoreOutlined />, label: 'Todas las Tareas' },
+            ...categories.map(c => ({
+              key: String(c.id),
+              label: (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>{c.title}</span>
+                  <DeleteOutlined
+                    style={{ fontSize: 12, color: '#999' }}
+                    onClick={(e) => handleDeleteCategory(e, c.id)}
+                  />
+                </div>
+              )
+            }))
+          ]}
         />
         <div style={{ padding: 16, borderTop: '1px solid #f0f0f0' }}>
-            <Input.Search placeholder="Nueva Categoría" onSearch={handleAddCategory} enterButton={<PlusOutlined />} />
+          <Input.Search placeholder="Nueva Categoría" onSearch={handleAddCategory} enterButton={<PlusOutlined />} />
         </div>
       </Sider>
       <Layout>
         <Header style={{ background: '#fff', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 2px 8px #f0f1f2' }}>
-           <Title level={3} style={{ margin: 0 }}>
-               {selectedCategory === 'all' ? 'Todas las Tareas' : categories.find(c => String(c.id) === selectedCategory)?.title}
-           </Title>
-           <Button icon={<LogoutOutlined />} onClick={handleLogout}>Salir</Button>
+          <Title level={3} style={{ margin: 0 }}>
+            {selectedCategory === 'all' ? 'Todas las Tareas' : 'Estás viendo: ' + categories.find(c => String(c.id) === selectedCategory)?.title}
+          </Title>
+          <Button icon={<LogoutOutlined />} onClick={handleLogout}>Salir</Button>
         </Header>
         <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', borderRadius: 8, overflow: 'auto' }}>
-           <Tabs defaultActiveKey="1" items={items} />
+          <Tabs defaultActiveKey="1" items={items} />
         </Content>
       </Layout>
-      <FloatButton 
-        icon={<PlusOutlined />} 
-        type="primary" 
-        style={{ right: 24, bottom: 24, width: 60, height: 60 }} 
-        onClick={() => setIsTaskModalOpen(true)} 
+      <FloatButton
+        icon={<PlusOutlined />}
+        type="primary"
+        style={{ right: 24, bottom: 24, width: 60, height: 60 }}
+        onClick={() => setIsTaskModalOpen(true)}
       />
-      
-      <TaskForm 
-        open={isTaskModalOpen} 
-        categories={categories} 
-        onCreate={handleCreateTask} 
+
+      <TaskForm
+        open={isTaskModalOpen}
+        categories={categories}
+        onCreate={handleCreateTask}
         onCancel={() => setIsTaskModalOpen(false)}
       />
     </Layout>

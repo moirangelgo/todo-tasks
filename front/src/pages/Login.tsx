@@ -3,6 +3,7 @@ import { Form, Input, Button, Card, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../services/auth';
+import logo from '../assets/logo.png';
 
 const { Title } = Typography;
 
@@ -28,8 +29,10 @@ const Login: React.FC = () => {
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f0f2f5' }}>
       <Card style={{ width: 400, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <Title level={2}>Tasker UI</Title>
-          <Typography.Text type="secondary">Bienvenido de nuevo</Typography.Text>
+          <Title level={2}>
+            <img src={logo} alt="Logo" width="200" />
+          </Title>
+          <Typography.Text type="secondary">Bienvenido </Typography.Text>
         </div>
         <Form
           name="login"
@@ -56,7 +59,7 @@ const Login: React.FC = () => {
             </Button>
           </Form.Item>
           <div style={{ textAlign: 'center' }}>
-            O <Link to="/register">¡regístrate ahora!</Link>
+            <Link to="/register">Crear cuenta</Link>
           </div>
         </Form>
       </Card>
